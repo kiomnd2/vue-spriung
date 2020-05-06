@@ -25,7 +25,9 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="btn_login('loginForm')">로그인</el-button>
+              <el-button type="primary" @click="btn_login('loginForm')"
+                >로그인</el-button
+              >
               <el-button type="">회원가입</el-button>
             </el-form-item>
           </el-form>
@@ -42,14 +44,16 @@ export default {
   name: 'Login',
   data() {
     const validPassword = (rule, value, callback) => {
-      if(value == '') {
-        callback(new Error('패스워드를 입력해 주세요'))
+      if (value === '') {
+        callback(new Error('패스워드를 입력해 주세요'));
       }
+      callback();
     };
     const validId = (rule, value, callback) => {
-      if(value == '') {
-        callback(new Error('아이디를 입력해 주세요'))
+      if (value === '') {
+        callback(new Error('아이디를 입력해 주세요'));
       }
+      callback();
     };
     return {
       labelPosition: 'top',
@@ -58,19 +62,22 @@ export default {
         id: '',
         password: '',
       },
-      rules : {
-        id : [{ validator : validId , trigger : 'blur'}],
-        password : [{ validator : validPassword , trigger : 'blur'}],
-      }
+      rules: {
+        id: [{ validator: validId, trigger: 'blur' }],
+        password: [{ validator: validPassword, trigger: 'blur' }],
+      },
     };
   },
   methods: {
     btn_login(formname) {
       //검증
-      console.log();
       this.$refs[formname].validate((valid) => {
-        if(valid){
-          executeLogin(this.form);
+        if (valid) {
+          console.log(executeLogin);
+          executeLogin({
+            id: this.loginForm.id,
+            password: this.loginForm.password,
+          });
         }
       });
     },
