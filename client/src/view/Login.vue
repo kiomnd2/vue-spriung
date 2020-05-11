@@ -74,6 +74,10 @@ export default {
           executeLogin({
             id: this.loginForm.id,
             password: this.loginForm.password,
+          }).then((res)=> {
+            console.log(res);
+          }).catch( ()=>{
+
           });
         }
       });
