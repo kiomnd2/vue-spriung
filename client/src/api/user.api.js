@@ -6,4 +6,8 @@ const executeLogin = (form) => {
   return axios.post('api/login', form);
 };
 
-export { executeLogin };
+const executeJoin = (form) => {
+  return axios.post('api/join', form);
+};
+
+export { executeLogin, executeJoin };

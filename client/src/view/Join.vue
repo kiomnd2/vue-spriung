@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import { executeJoin } from '../api/user.api';
+
 export default {
   name: 'Join',
   data() {
@@ -79,8 +81,8 @@ export default {
       }
       callback();
     };
-    const validEmail = (rule, value, callback) =>{
-      if(value ==='') {
+    const validEmail = (rule, value, callback) => {
+      if (value === '') {
         callback(new Error('이메일을 입력해주세요.'));
       }
     };
@@ -112,10 +114,12 @@ export default {
             trigger: 'blur',
           },
         ],
-        email : [{
-          validator : validEmail,
-          trigger : 'blur'
-        }]
+        email: [
+          {
+            validator: validEmail,
+            trigger: 'blur',
+          },
+        ],
       },
     };
   },
@@ -123,7 +127,13 @@ export default {
     btn_submit(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log(valid);
+          executeJoin(this.joinForm)
+            .then(() => {
+              this.$router.push("/");
+            })
+            .catch((e) => {
+              console.log(e);
+            });
         }
       });
     },
