@@ -11,25 +11,21 @@
             :rules="rules"
             ref="loginForm"
           >
-            <el-form-item prop="id">
+            <el-form-item prop="id" label="ID">
               <el-input
                 placeholder="아이디를 입력해주세요."
                 v-model="loginForm.id"
               ></el-input>
             </el-form-item>
-            <el-form-item prop="password">
+            <el-form-item prop="password" label="Password">
               <el-input
                 type="password"
                 placeholder="패스워드를 입력해주세요."
                 v-model="loginForm.password"
               ></el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="btn_login('loginForm')"
-                >로그인</el-button
-              >
-              <el-button type="">회원가입</el-button>
-            </el-form-item>
+            <el-button type="primary" @click="btn_login('loginForm')">로그인</el-button>
+            <el-button v-on:click="btn_join" type="">회원가입</el-button>
           </el-form>
         </el-card>
       </el-col>
@@ -56,7 +52,7 @@ export default {
       callback();
     };
     return {
-      labelPosition: 'top',
+      labelPosition: 'left',
       img_src: 'logo.jpg',
       loginForm: {
         id: '',
@@ -80,6 +76,9 @@ export default {
           });
         }
       });
+    },
+    btn_join() {
+      this.$router.push('join');
     },
   },
 };
