@@ -17,7 +17,7 @@
                 v-model="joinForm.id"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Email">
+            <el-form-item prop="email" label="Email">
               <el-input
                 placeholder="이메일을 입력해 주세요"
                 v-model="joinForm.email"
@@ -26,6 +26,7 @@
             </el-form-item>
             <el-form-item prop="password" label="Password">
               <el-input
+                type="password"
                 placeholder="패스워드를 입력해주세요"
                 v-model="joinForm.password"
               >
@@ -33,62 +34,122 @@
             </el-form-item>
             <el-form-item prop="checkPassword" label="Confirm">
               <el-input
-                      placeholder="패스워드를 재입력 해주세요"
-                      v-model="joinForm.password"
+                type="password"
+                placeholder="패스워드를 재입력 해주세요"
+                v-model="joinForm.checkPassword"
               >
               </el-input>
             </el-form-item>
-            <el-button type="primary" @click="btn_submit('ruleForm')">가입하기</el-button>
-            <el-button @click="btn_reset('ruleForm')">RESET</el-button>
+            <el-button type="primary" @click="btn_submit('joinForm')"
+              >가입하기</el-button
+            >
+            <el-button @click="btn_reset('joinForm')">RESET</el-button>
             <el-button @click="btn_back">뒤로가기</el-button>
           </el-form>
         </el-card>
       </el-col>
     </el-row>
-    </div>
+  </div>
 </template>
 
 <script>
-  export default {
-    name: 'Join',
-    data() {
-      return {
-        labelPosition: 'left',
-        joinForm : {
-          id : '',
-          password : '',
-          checkPassword : '',
-          email : '',
+export default {
+  name: 'Join',
+  data() {
+    const validId = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('아이디를 입력해주세요.'));
+      } else {
+        callback();
+      }
+    };
+
+    const validPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('패스워드를 입력해 주세요.'));
+      } else {
+        callback();
+      }
+    };
+    const validCheckPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('패스워드를 확인해 주세요.'));
+      } else if (value !== this.joinForm.password) {
+        callback(new Error('패스워드가 일치하지 않습니다.'));
+      }
+      callback();
+    };
+    const validEmail = (rule, value, callback) =>{
+      if(value ==='') {
+        callback(new Error('이메일을 입력해주세요.'));
+      }
+    };
+
+    return {
+      labelPosition: 'left',
+      joinForm: {
+        id: '',
+        password: '',
+        checkPassword: '',
+        email: '',
+      },
+      rules: {
+        id: [
+          {
+            validator: validId,
+            trigger: 'blur',
+          },
+        ],
+        password: [
+          {
+            validator: validPassword,
+            trigger: 'blur',
+          },
+        ],
+        checkPassword: [
+          {
+            validator: validCheckPassword,
+            trigger: 'blur',
+          },
+        ],
+        email : [{
+          validator : validEmail,
+          trigger : 'blur'
+        }]
+      },
+    };
+  },
+  methods: {
+    btn_submit(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          console.log(valid);
         }
-      }
+      });
     },
-    methods : {
-      btn_submit (form) {
-        console.log(form);
-      },
-      btn_reset (form) {
-        console.log(form);
-      },
-      btn_back (){
-        this.$router.push('/');
-      }
-    }
-  };
+    btn_reset(form) {
+      this.$refs[form].resetFields();
+    },
+    btn_back() {
+      this.$router.push('/');
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .top {
-    margin-top: 300px;
-  }
+.top {
+  margin-top: 300px;
+}
 
-  .join_top {
-    text-align: center;
-    display: inline-block;
-  }
+.join_top {
+  text-align: center;
+  display: inline-block;
+}
 
-  .join_main {
-    display: inline-block;
-    height: 381px;
-    width: 500px;
-  }
+.join_main {
+  display: inline-block;
+  height: 381px;
+  width: 500px;
+}
 </style>
