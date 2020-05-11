@@ -24,7 +24,9 @@
                 v-model="loginForm.password"
               ></el-input>
             </el-form-item>
-            <el-button type="primary" @click="btn_login('loginForm')">로그인</el-button>
+            <el-button type="primary" @click="btn_login('loginForm')"
+              >로그인</el-button
+            >
             <el-button v-on:click="btn_join" type="">회원가입</el-button>
           </el-form>
         </el-card>
@@ -69,7 +71,6 @@ export default {
       //검증
       this.$refs[formname].validate((valid) => {
         if (valid) {
-          console.log(executeLogin);
           executeLogin({
             id: this.loginForm.id,
             password: this.loginForm.password,
