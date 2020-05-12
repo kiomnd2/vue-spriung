@@ -11,10 +11,16 @@
             :rules="rules"
             ref="joinForm"
           >
-            <el-form-item prop="id" label="ID">
+            <el-form-item prop="userId" label="ID">
               <el-input
                 placeholder="아이디를 입력해주세요"
-                v-model="joinForm.id"
+                v-model="joinForm.userId"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="userNm" label="Name">
+              <el-input
+                placeholder="이름을 입력해주세요"
+                v-model="joinForm.userNm"
               ></el-input>
             </el-form-item>
             <el-form-item prop="email" label="Email">
@@ -65,6 +71,13 @@ export default {
         callback();
       }
     };
+    const validNm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('이름을 입력해주세요.'));
+      } else {
+        callback();
+      }
+    };
 
     const validPassword = (rule, value, callback) => {
       if (value === '') {
@@ -90,15 +103,22 @@ export default {
     return {
       labelPosition: 'left',
       joinForm: {
-        id: '',
+        userId: '',
+        userNm: '',
         password: '',
         checkPassword: '',
         email: '',
       },
       rules: {
-        id: [
+        userId: [
           {
             validator: validId,
+            trigger: 'blur',
+          },
+        ],
+        userNm: [
+          {
+            validator: validNm,
             trigger: 'blur',
           },
         ],
@@ -129,7 +149,7 @@ export default {
         if (valid) {
           executeJoin(this.joinForm)
             .then(() => {
-              this.$router.push("/");
+              this.$router.push('/');
             })
             .catch((e) => {
               console.log(e);
@@ -159,7 +179,7 @@ export default {
 
 .join_main {
   display: inline-block;
-  height: 381px;
+  height: 100%;
   width: 500px;
 }
 </style>

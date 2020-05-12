@@ -14,7 +14,7 @@
             <el-form-item prop="id" label="ID">
               <el-input
                 placeholder="아이디를 입력해주세요."
-                v-model="loginForm.id"
+                v-model="loginForm.userId"
               ></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password">
@@ -22,6 +22,7 @@
                 type="password"
                 placeholder="패스워드를 입력해주세요."
                 v-model="loginForm.password"
+                autofocus
               ></el-input>
             </el-form-item>
             <el-button type="primary" @click="btn_login('loginForm')"
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import { executeLogin } from '../api/login.api';
+import { executeLogin } from '../api/user.api';
 
 export default {
   name: 'Login',
@@ -57,11 +58,11 @@ export default {
       labelPosition: 'left',
       img_src: 'logo.jpg',
       loginForm: {
-        id: '',
+        userId: '',
         password: '',
       },
       rules: {
-        id: [{ validator: validId, trigger: 'blur' }],
+        userId: [{ validator: validId, trigger: 'blur' }],
         password: [{ validator: validPassword, trigger: 'blur' }],
       },
     };
@@ -72,12 +73,14 @@ export default {
       this.$refs[formname].validate((valid) => {
         if (valid) {
           executeLogin({
-            id: this.loginForm.id,
+            id: this.loginForm.userId,
             password: this.loginForm.password,
           }).then((res)=> {
             console.log(res);
-          }).catch( ()=>{
 
+
+          }).catch( ()=>{
+            // this.$refs[formname].password.focus(); 포커스 어떡하냐
           });
         }
       });
@@ -101,7 +104,7 @@ export default {
 
 .login_main {
   display: inline-block;
-  height: 381px;
+  height: 100%;
   width: 500px;
 }
 </style>
