@@ -150,10 +150,7 @@ export default {
         if (valid) {
           executeRegister(this.joinForm)
             .then(() => {
-              this.$store.commit('setUserState', {
-                userId: this.joinForm.userId,
-                userNm: this.joinForm.userNm,
-              }); // 유저 정보 업데이트
+
               this.$router.push('/');
             })
             .catch((e) => {

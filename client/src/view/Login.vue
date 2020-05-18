@@ -76,9 +76,12 @@ export default {
             id: this.loginForm.userId,
             password: this.loginForm.password,
           }).then((res)=> {
+            this.$store.commit('setUserState', {
+              userId: this.joinForm.userId,
+              userNm: this.joinForm.userNm,
+            }); // 유저 정보 업데이트
+            //res userNm, userId, email
             console.log(res);
-
-
           }).catch( ()=>{
             // this.$refs[formname].password.focus(); 포커스 어떡하냐
           });
