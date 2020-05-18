@@ -8,7 +8,12 @@ Vue.use(Vuex);
 
 const state = {
   counter: 0,
+  userState : {
+    userId : '',
+    userNm : '',
+  }
 };
+
 
 const store = new Vuex.Store({
   state,

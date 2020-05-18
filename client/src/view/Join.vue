@@ -46,7 +46,7 @@
               >
               </el-input>
             </el-form-item>
-            <el-button type="primary" @click="btn_submit('joinForm')"
+            <el-button type="primary" v-on:click="btn_submit('joinForm')"
               >가입하기</el-button
             >
             <el-button @click="btn_reset('joinForm')">RESET</el-button>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { executeJoin } from '../api/user.api';
+import { executeRegister } from '../api/user.api';
 
 export default {
   name: 'Join',
@@ -98,6 +98,7 @@ export default {
       if (value === '') {
         callback(new Error('이메일을 입력해주세요.'));
       }
+      callback();
     };
 
     return {
@@ -147,8 +148,12 @@ export default {
     btn_submit(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          executeJoin(this.joinForm)
+          executeRegister(this.joinForm)
             .then(() => {
+              this.$store.commit('setUserState', {
+                userId: this.joinForm.userId,
+                userNm: this.joinForm.userNm,
+              }); // 유저 정보 업데이트
               this.$router.push('/');
             })
             .catch((e) => {
