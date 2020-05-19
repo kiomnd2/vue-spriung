@@ -3,19 +3,15 @@ package com.kiomnd2.vuespring.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
-@Setter
 @EqualsAndHashCode
 @ToString
 @Entity
 @NoArgsConstructor
+@Table(name="Member")
 public class Member {
 
     @Id @GeneratedValue
@@ -28,9 +24,8 @@ public class Member {
     private String userNm;
     @Column( length = 200)
     private String email;
-    @Column( length = 20)
+    @Column( length = 200)
     private String password;
-    @Column( length =14)
 
     @CreationTimestamp
     private LocalDateTime regDate;
@@ -38,6 +33,15 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime updateDate;
 
+
+    @Builder
+    public Member(final String userId, final String userNm, final String email, final String password)
+    {
+        this.userId = userId;
+        this.userNm = userNm;
+        this.email = email;
+        this.password = password;
+    }
 
 
 }
