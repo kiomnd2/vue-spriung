@@ -2,7 +2,7 @@
   <div class="top">
     <el-row>
       <el-col class="join_top">
-        <el-card class="join_main" shadow="false">
+        <el-card class="join_main" shadow="false" v-loading="loading">
           <span>가입화면</span>
           <el-form
             :label-position="labelPosition"
@@ -110,6 +110,7 @@ export default {
         checkPassword: '',
         email: '',
       },
+      loading: false,
       rules: {
         userId: [
           {
@@ -148,12 +149,15 @@ export default {
     btn_submit(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
+          this.loading = true;
           executeRegister(this.joinForm)
             .then(() => {
-
+              this.loading = false;
               this.$router.push('/');
             })
             .catch((e) => {
+              this.$message('로그인이 실패 했습니다.');
+              this.loading = false;
               console.log(e);
             });
         }
