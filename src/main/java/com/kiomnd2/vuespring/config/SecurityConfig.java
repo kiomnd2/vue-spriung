@@ -8,6 +8,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,8 +35,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .csrf()
-                .disable();
-    }
+                .disable() // 다시한번 세팅
+                .authorizeRequests()
+                    .antMatchers("/","/login","/join").permitAll()
+                .antMatchers("/api/*").hasRole("USER") // 유저라는 롤이 있어야 main 접근가능
+                    .anyRequest().authenticated()
+                    .and()
+                .formLogin()
+                .loginProcessingUrl("/api/login")
+                .successHandler(new CustomUrlAuthenticationSuccessHandler())
+                .failureHandler(new CustomUrlAuthenticationFailureHandler())
+                .usernameParameter("userNm")
+                .passwordParameter("password")
+                .and()
+                .logout()
+                    .logoutSuccessUrl("/login")
+                    .permitAll();
+    } // json 으로 응답 주게끔 설정 찾아보기
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -42,6 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
 
