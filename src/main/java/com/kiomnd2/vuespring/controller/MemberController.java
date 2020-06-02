@@ -1,36 +1,39 @@
 package com.kiomnd2.vuespring.controller;
 
-import com.kiomnd2.vuespring.entity.Member;
-import com.kiomnd2.vuespring.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kiomnd2.vuespring.dto.MemberDto;
+import com.kiomnd2.vuespring.entity.MemberEntity;
+import com.kiomnd2.vuespring.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping(value = "/api")
 @RestController
 public class MemberController
 {
-    MemberRepository memberRepository;
 
-    @Autowired
-    public MemberController(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    final MemberService memberService;
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    public String login( ) {
 
-
-    @RequestMapping(method = RequestMethod.POST, value = "/api/login")
-    public String hello() {
-        System.out.println("hello");
         return "hello";
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value ="/api/register")
-    public boolean register(Member member)
+    /**
+     * 회원 가입을 수행한다
+     * @param member
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value ="/register")
+    public MemberDto register(@RequestBody MemberDto member)
     {
-        System.out.println(member.toString());
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        memberRepository.save(member);
-        return true;
+        memberService.registerUser(member);
+        return member;
     }
 
 }
+
