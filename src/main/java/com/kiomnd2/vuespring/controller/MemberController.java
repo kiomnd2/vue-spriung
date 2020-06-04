@@ -5,7 +5,7 @@ import com.kiomnd2.vuespring.entity.MemberEntity;
 import com.kiomnd2.vuespring.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/user")
 @RestController
 public class MemberController
 {
@@ -21,8 +21,6 @@ public class MemberController
 
         return "hello";
     }
-
-
     /**
      * 회원 가입을 수행한다
      * @param member

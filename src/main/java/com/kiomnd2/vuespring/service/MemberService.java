@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MemberService implements UserDetailsService {
 
@@ -22,23 +24,28 @@ public class MemberService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        MemberDto memberDto = memberRepository.findById(userId);
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        MemberEntity member = memberRepository.findByUserId(id);
 
-        if( memberDto == null) {
-            throw new UsernameNotFoundException(userId);
+        if(member == null ){
+            throw new UsernameNotFoundException(id);
         }
 
         // memberDto
 
-        return memberDto;
+        return MemberDto.builder().auth("ROLE_USER")
+                .password(member.getPassword())
+                .userNm(member.getUserNm())
+                .userId(member.getUserId())
+                .email(member.getEmail())
+                .build();
     }
 
-    public MemberDto registerUser(MemberDto member)
+    public MemberEntity registerUser(MemberDto member)
     {
         MemberDto.builder().password(encoder.encode(member.getPassword()));
 
-        return memberRepository.save(member);
+        return memberRepository.save(member.toEntity());
     }
 
 }

@@ -38,11 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .disable() // 다시한번 세팅
                 .authorizeRequests()
                     .antMatchers("/","/login","/join").permitAll()
-                .antMatchers("/api/*").hasRole("USER") // 유저라는 롤이 있어야 main 접근가능
-                    .anyRequest().authenticated()
+                    .antMatchers("/api/user/*").permitAll()
+                    .anyRequest().hasRole("USER")
                     .and()
                 .formLogin()
-                .loginProcessingUrl("/api/login")
+                .loginProcessingUrl("/api/user/login")
                 .successHandler(new CustomUrlAuthenticationSuccessHandler())
                 .failureHandler(new CustomUrlAuthenticationFailureHandler())
                 .usernameParameter("userNm")
