@@ -37,8 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .csrf()
                 .disable() // 다시한번 세팅
                 .authorizeRequests()
-                    .antMatchers("/","/login","/join").permitAll()
-                    .antMatchers("/api/user/*").permitAll()
+                    .antMatchers("/","/api/user/*").permitAll()
                     .anyRequest().hasRole("USER")
                     .and()
                 .formLogin()

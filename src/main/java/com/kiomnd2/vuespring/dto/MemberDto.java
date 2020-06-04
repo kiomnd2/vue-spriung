@@ -2,6 +2,7 @@ package com.kiomnd2.vuespring.dto;
 
 import com.kiomnd2.vuespring.entity.MemberEntity;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,8 +14,9 @@ import java.util.Collection;
 
 
 @Getter
+@Data
 @NoArgsConstructor
-public class MemberDto implements UserDetails{
+public class MemberDto{
 
     private String userId;
     private String userNm;
@@ -32,38 +34,6 @@ public class MemberDto implements UserDetails{
         this.email = email;
         this.password = password;
         this.auth = auth;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(auth));
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.userId;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 
     public MemberEntity toEntity() {

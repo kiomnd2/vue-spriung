@@ -3,12 +3,17 @@ package com.kiomnd2.vuespring.service;
 import com.kiomnd2.vuespring.dto.MemberDto;
 import com.kiomnd2.vuespring.entity.MemberEntity;
 import com.kiomnd2.vuespring.repository.MemberRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,12 +38,11 @@ public class MemberService implements UserDetailsService {
 
         // memberDto
 
-        return MemberDto.builder().auth("ROLE_USER")
-                .password(member.getPassword())
-                .userNm(member.getUserNm())
-                .userId(member.getUserId())
-                .email(member.getEmail())
-                .build();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new User(member.getUserId(), member.getPassword(), authorities);
     }
 
     public MemberEntity registerUser(MemberDto member)
