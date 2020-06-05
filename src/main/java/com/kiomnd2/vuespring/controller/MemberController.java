@@ -3,6 +3,7 @@ package com.kiomnd2.vuespring.controller;
 import com.kiomnd2.vuespring.dto.MemberDto;
 import com.kiomnd2.vuespring.entity.MemberEntity;
 import com.kiomnd2.vuespring.service.MemberService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/api/user")
@@ -17,9 +18,10 @@ public class MemberController
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public String login( ) {
+    public String login(@RequestBody MemberDto memberDto) {
+        memberService.loadUserByUsername(memberDto.getUserId());
 
-        return "hello";
+        return memberDto.getUserId();
     }
     /**
      * 회원 가입을 수행한다
