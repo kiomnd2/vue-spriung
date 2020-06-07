@@ -1,7 +1,6 @@
 package com.kiomnd2.vuespring.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,7 +10,8 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @NoArgsConstructor
-public class MemberEntity {
+@Table(name = "member")
+public class MemberEntity extends TimeEntity{
 
     @Id @GeneratedValue
     private long id;
@@ -27,12 +27,6 @@ public class MemberEntity {
     private String password;
 
     private String auth;
-
-    @CreationTimestamp
-    private LocalDateTime regDate;
-
-    @CreationTimestamp
-    private LocalDateTime updateDate;
 
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
 

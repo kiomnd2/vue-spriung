@@ -5,12 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -18,22 +14,28 @@ import java.util.Collection;
 @NoArgsConstructor
 public class MemberDto{
 
+    private Long id;
     private String userId;
     private String userNm;
     private String email;
     private String password;
     private String auth;
+    private LocalDateTime regDate;
+    private LocalDateTime updateDate;
+
 
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
 
     @Builder
-    public MemberDto(final String userId, final String userNm, final String email, final String password, final String auth)
+    public MemberDto(final long id, final String userId, final String userNm, final String email, final String password, final String auth, final LocalDateTime regDate, final LocalDateTime updateDate )
     {
         this.userId = userId;
         this.userNm = userNm;
         this.email = email;
         this.password = password;
         this.auth = auth;
+        this.regDate = regDate;
+        this.updateDate = updateDate;
     }
 
     public MemberEntity toEntity() {
