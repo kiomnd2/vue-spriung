@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,34 +22,32 @@ public class MemberService implements UserDetailsService {
 
     final MemberRepository memberRepository;
 
-    final PasswordEncoder encoder;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder encoder) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.encoder = encoder;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        MemberEntity member = memberRepository.findByUserId(id);
+        Optional<MemberEntity> member = memberRepository.findByUserId(id);
 
-        if(member == null ){
-            throw new UsernameNotFoundException(id);
-        }
-
-        // memberDto
+        MemberEntity userEntity = member.get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new User(member.getUserId(), member.getPassword(), authorities);
+        return new User(userEntity.getUserId(), userEntity.getPassword(), authorities);
     }
 
-    public MemberEntity registerUser(MemberDto member)
-    {
-        MemberDto.builder().password(encoder.encode(member.getPassword()));
 
+
+
+    public MemberEntity registerUser(MemberDto member) {
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         return memberRepository.save(member.toEntity());
     }
 
