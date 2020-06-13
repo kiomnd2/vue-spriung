@@ -26,18 +26,17 @@ public class MemberEntity extends TimeEntity{
     @Column( length = 200)
     private String password;
 
-    private String auth;
 
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
 
     @Builder
-    public MemberEntity(final String userId, final String userNm, final String email, final String password, final String auth)
+    public MemberEntity(final long id, final String userId, final String userNm, final String email, final String password)
     {
+        this.id = id;
         this.userId = userId;
         this.userNm = userNm;
         this.email = email;
         this.password = password;
-        this.auth = auth;
     }
 
 

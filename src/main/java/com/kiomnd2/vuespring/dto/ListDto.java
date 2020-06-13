@@ -14,14 +14,16 @@ public class ListDto {
     private Long id;
     private String contents;
     private boolean isComplete;
+    private MemberDto memberDto;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
     @Builder
-    public ListDto(Long id, String contents, boolean isComplete, LocalDateTime regDate, LocalDateTime updateDate) {
+    public ListDto(Long id, String contents, boolean isComplete, MemberDto memberDto, LocalDateTime regDate, LocalDateTime updateDate) {
         this.id = id;
         this.contents = contents;
         this.isComplete = isComplete;
+        this.memberDto = memberDto;
         this.regDate = regDate;
         this.updateDate = updateDate;
     }
@@ -29,8 +31,8 @@ public class ListDto {
     public ListEntity toEntity() {
         return ListEntity
                 .builder()
-                .id(id)
                 .contents(contents)
+                .member(memberDto.toEntity())
                 .isComplete(isComplete)
                 .build();
     }

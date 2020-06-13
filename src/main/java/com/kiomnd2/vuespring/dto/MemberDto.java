@@ -19,7 +19,6 @@ public class MemberDto{
     private String userNm;
     private String email;
     private String password;
-    private String auth;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
@@ -27,15 +26,18 @@ public class MemberDto{
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
 
     @Builder
-    public MemberDto(final long id, final String userId, final String userNm, final String email, final String password, final String auth, final LocalDateTime regDate, final LocalDateTime updateDate )
+    public MemberDto(final long id, final String userId, final String userNm, final String email, final String password, final LocalDateTime regDate, final LocalDateTime updateDate )
     {
         this.userId = userId;
         this.userNm = userNm;
         this.email = email;
         this.password = password;
-        this.auth = auth;
         this.regDate = regDate;
         this.updateDate = updateDate;
+    }
+
+    public void updatePassword(MemberDto memberDto) {
+
     }
 
     public MemberEntity toEntity() {
@@ -44,7 +46,6 @@ public class MemberDto{
                 .userNm(userNm)
                 .email(email)
                 .password(password)
-                .auth(auth)
                 .build();
     }
 }
