@@ -2,6 +2,7 @@ package com.kiomnd2.vuespring.service;
 
 
 import com.kiomnd2.vuespring.dto.ListDto;
+import com.kiomnd2.vuespring.dto.MemberDto;
 import com.kiomnd2.vuespring.entity.ListEntity;
 import com.kiomnd2.vuespring.repository.ListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class ListService {
         this.listRepository = listRepository;
     }
 
-    public List<ListDto> getTodoList(Long id) {
-        List<ListEntity> listEntities = listRepository.findAllById(id);
+    public List<ListDto> getTodoList(MemberDto member) {
+        List<ListEntity> listEntities = listRepository.findAllByMember_UserId(member.getUserId());
         List<ListDto> listDtos = new ArrayList<>();
 
 
@@ -36,7 +37,22 @@ public class ListService {
                             .build()
             );
         });
-
         return listDtos;
+    }
+
+
+
+    public Long registerItem(ListDto listDto) {
+        return listRepository.save(listDto.toEntity()).getId();
+    }
+
+    public void deleteItem(ListDto listDto) {
+        listRepository.deleteById(listDto.getId());
+    }
+
+    public Long updateItem(ListDto listDto) {
+        ListEntity list= listRepository.findById(listDto.getId()).get();
+        list.update(listDto);
+        return listRepository.save(list).getId();
     }
 }

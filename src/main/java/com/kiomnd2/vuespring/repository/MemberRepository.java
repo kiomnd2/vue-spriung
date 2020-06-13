@@ -8,5 +8,5 @@ import java.util.Optional;
 
 
 public interface MemberRepository extends CrudRepository<MemberEntity,Long> {
-    MemberEntity findByUserId(String id);
+    Optional<MemberEntity> findByUserId(String id);
 }
