@@ -18,7 +18,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,10 +54,9 @@ public class MockMvcTest {
 
         MemberDto dto = MemberDto.builder()
                 .email("email@naver.com")
-                .userId("password")
+                .userId("id")
                 .userNm("name")
                 .password("password")
-                .auth("ROLE_USER")
                 .build();
 
         given(service.registerUser(any())).willReturn(new MemberEntity());
@@ -73,11 +76,11 @@ public class MockMvcTest {
 
 
     @Test
-    public void 로그인_테스트() throws Exception {
+    public void 로그인_실패_테스트() throws Exception {
 
         MemberDto dto = MemberDto.builder()
                 .email("email@naver.com")
-                .userId("password")
+                .userId("id")
                 .userNm("name")
                 .password("password")
                 .build();
@@ -93,9 +96,32 @@ public class MockMvcTest {
         JSONResult result = mapper.readValue(memberAsString, JSONResult.class);
 
         Assert.assertThat("fail", is(result.getResult()));
-
     }
 
+    @Test
+    @WithMockUser(username = "id", roles = "USER")
+    public void 로그인_성공_테스트()throws Exception {
+
+        MemberDto dto = MemberDto.builder()
+                .userId("id")
+                .userNm("name")
+                .password("password")
+                .build();
+
+
+        String memberAsString = mockMvc.perform(post("/api/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.valueOf(mapper.writeValueAsString(dto))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        JSONResult result = mapper.readValue(memberAsString, JSONResult.class);
+
+//        Assert.assertThat("success", is(result.getResult()));
+
+    }
 
 
 }
