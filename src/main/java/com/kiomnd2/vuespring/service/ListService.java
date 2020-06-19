@@ -42,8 +42,15 @@ public class ListService {
 
 
 
-    public Long registerItem(ListDto listDto) {
-        return listRepository.save(listDto.toEntity()).getId();
+    public ListDto registerItem(ListDto listDto) {
+        ListEntity listEntity = listRepository.save(listDto.toEntity());
+        return ListDto.builder()
+                .contents(listEntity.getContents())
+                .id(listEntity.getId())
+                .isComplete(listEntity.isComplete())
+                .regDate(listEntity.getRegDate())
+                .updateDate(listEntity.getUpdateDate())
+                .build();
     }
 
     public void deleteItem(ListDto listDto) {
