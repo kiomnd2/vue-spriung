@@ -36,9 +36,6 @@ public class MemberDto{
         this.updateDate = updateDate;
     }
 
-    public void updatePassword(MemberDto memberDto) {
-
-    }
 
     public MemberEntity toEntity() {
         return MemberEntity.builder()

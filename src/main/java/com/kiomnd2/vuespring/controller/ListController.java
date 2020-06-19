@@ -12,28 +12,31 @@ import java.util.List;
 @RequestMapping(value = "/api/list")
 @RestController
 public class ListController {
-
     final ListService listService;
-
 
     public ListController(ListService listService) {
         this.listService = listService;
     }
 
-    @GetMapping("getAll")
-    public List<ListDto> getList(@RequestBody MemberDto member) {
+    @PostMapping("/getAll")
+    public List<ListDto>  getAll(@RequestBody MemberDto member) {
+        System.out.println(member.toString());
         return  listService.getTodoList(member);
     }
 
     @PostMapping("/register")
-    public void registerList(@RequestBody ListDto listDto) {
-        listService.registerItem(listDto);
+    public ListDto registerItem(@RequestBody ListDto listDto) {
+        System.out.println(listDto);
+        return listService.registerItem(listDto);
     }
 
     @PostMapping("/update")
-    public void updateList(@RequestBody ListDto listDto) { }
+    public void updateItem(@RequestBody ListDto listDto) { listService.updateItem(listDto); }
 
 
-
+    @PostMapping("/delete")
+    public void deleteItem(@RequestBody ListDto listDto) {
+        listService.deleteItem(listDto);
+    }
 
 }
