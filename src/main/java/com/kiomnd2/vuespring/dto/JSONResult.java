@@ -7,10 +7,13 @@ public class JSONResult {
     private Object data;
 
 
+    public static JSONResult success(String message) {
+        return new JSONResult("success", message, null);
+    }
+
     public static JSONResult success(Object data) {
         return new JSONResult("success", null, data);
     }
-
     public static JSONResult success(Object data, String value) {
         return new JSONResult("success", value, data);
     }

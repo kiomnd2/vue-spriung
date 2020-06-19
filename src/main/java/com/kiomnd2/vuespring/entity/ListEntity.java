@@ -22,7 +22,7 @@ public class ListEntity extends TimeEntity{
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(targetEntity = MemberEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = MemberEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_userId")
     private MemberEntity member;
 
