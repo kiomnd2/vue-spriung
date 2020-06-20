@@ -48,7 +48,14 @@ public class MemberService implements UserDetailsService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return memberRepository.save(member.toEntity());
+
+        MemberEntity entity = MemberEntity.builder()
+                .userId(member.getUserId())
+                .userNm(member.getUserNm())
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .build();
+        return memberRepository.save(entity);
     }
 
 }

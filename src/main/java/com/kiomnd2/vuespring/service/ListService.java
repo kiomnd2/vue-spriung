@@ -4,12 +4,13 @@ package com.kiomnd2.vuespring.service;
 import com.kiomnd2.vuespring.dto.ListDto;
 import com.kiomnd2.vuespring.dto.MemberDto;
 import com.kiomnd2.vuespring.entity.ListEntity;
+import com.kiomnd2.vuespring.entity.MemberEntity;
 import com.kiomnd2.vuespring.repository.ListRepository;
+import com.kiomnd2.vuespring.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ListService {
@@ -17,16 +18,21 @@ public class ListService {
     final
     ListRepository listRepository;
 
-    public ListService(ListRepository listRepository) {
+    final MemberRepository memberRepository;
+
+    public ListService(ListRepository listRepository, MemberRepository memberRepository) {
         this.listRepository = listRepository;
+        this.memberRepository = memberRepository;
     }
 
-    public List<ListDto> getTodoList(MemberDto member) {
-        List<ListEntity> listEntities = listRepository.findAllByMember_UserId(member.getUserId());
-        List<ListDto> listDtos = new ArrayList<>();
+    public Set<ListDto> getTodoList(MemberDto member) {
+        MemberEntity memberEntity = memberRepository.findByUserId(member.getUserId()).get();
 
+        Set<ListEntity> lists = memberEntity.getLists();
 
-        listEntities.forEach(listEntity -> {
+        Set<ListDto> listDtos = new HashSet<>();
+
+        lists.forEach(listEntity -> {
             listDtos.add(
                     ListDto.builder()
                             .id(listEntity.getId())
@@ -43,14 +49,22 @@ public class ListService {
 
 
     public ListDto registerItem(ListDto listDto) {
-        ListEntity listEntity = listRepository.save(listDto.toEntity());
+        MemberEntity memberEntity = memberRepository.findByUserId(listDto.getMemberDto().getUserId()).get();
+
+
+        ListEntity listEntity = ListEntity.builder()
+                .contents(listDto.getContents())
+                .isComplete(listDto.isComplete())
+                .member(memberEntity)
+                .build();
+
+        ListEntity le =listRepository.save(listEntity);
         return ListDto.builder()
-                .contents(listEntity.getContents())
-                .id(listEntity.getId())
-                .isComplete(listEntity.isComplete())
+                .isComplete(le.isComplete())
+                .contents(le.getContents())
                 .regDate(listEntity.getRegDate())
                 .updateDate(listEntity.getUpdateDate())
-                .build();
+                .id(le.getId()).build();
     }
 
     public void deleteItem(ListDto listDto) {
