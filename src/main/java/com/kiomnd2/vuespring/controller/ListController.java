@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping(value = "/api/list")
 @RestController
@@ -19,15 +20,16 @@ public class ListController {
     }
 
     @PostMapping("/getAll")
-    public List<ListDto>  getAll(@RequestBody MemberDto member) {
-        System.out.println(member.toString());
+    public Set<ListDto> getAll(@RequestBody MemberDto member) {
         return  listService.getTodoList(member);
     }
 
     @PostMapping("/register")
     public ListDto registerItem(@RequestBody ListDto listDto) {
-        System.out.println(listDto);
-        return listService.registerItem(listDto);
+        ListDto result = listService.registerItem(listDto);
+        return result;
+
+//        return listService.registerItem(listDto);
     }
 
     @PostMapping("/update")
