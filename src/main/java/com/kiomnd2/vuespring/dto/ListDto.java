@@ -4,6 +4,8 @@ import com.kiomnd2.vuespring.entity.ListEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode
 @ToString
@@ -18,6 +20,8 @@ public class ListDto {
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
+
+
     @Builder
     public ListDto(Long id, String contents, boolean isComplete, MemberDto memberDto, LocalDateTime regDate, LocalDateTime updateDate) {
         this.id = id;
@@ -31,9 +35,10 @@ public class ListDto {
     public ListEntity toEntity() {
         return ListEntity
                 .builder()
-                .contents(contents)
-                .member(memberDto.toEntity())
                 .isComplete(isComplete)
+                .contents(contents)
+                .isComplete(isComplete)
+                .member(memberDto.toEntity())
                 .build();
     }
 }

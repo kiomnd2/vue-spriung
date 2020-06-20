@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
-@EqualsAndHashCode
 @ToString
 @Getter
 @NoArgsConstructor
@@ -22,8 +21,7 @@ public class ListEntity extends TimeEntity{
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(targetEntity = MemberEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_userId")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private MemberEntity member;
 
     @Column(length = 500)
@@ -36,8 +34,11 @@ public class ListEntity extends TimeEntity{
     public ListEntity update(ListDto listDto) {
         this.contents = listDto.getContents();
         this.isComplete = listDto.isComplete();
-
         return this;
+    }
+
+    public void setMember(MemberEntity member){
+        this.member = member;
     }
 
     @Builder

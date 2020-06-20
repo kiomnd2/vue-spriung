@@ -1,5 +1,6 @@
 package com.kiomnd2.vuespring.dto;
 
+import com.kiomnd2.vuespring.entity.ListEntity;
 import com.kiomnd2.vuespring.entity.MemberEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -22,12 +25,15 @@ public class MemberDto{
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
+    List<ListEntity> list = new ArrayList<>();
+
 
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
 
     @Builder
     public MemberDto(final long id, final String userId, final String userNm, final String email, final String password, final LocalDateTime regDate, final LocalDateTime updateDate )
     {
+        this.id = id;
         this.userId = userId;
         this.userNm = userNm;
         this.email = email;
@@ -39,6 +45,7 @@ public class MemberDto{
 
     public MemberEntity toEntity() {
         return MemberEntity.builder()
+                .id(id)
                 .userId(userId)
                 .userNm(userNm)
                 .email(email)
