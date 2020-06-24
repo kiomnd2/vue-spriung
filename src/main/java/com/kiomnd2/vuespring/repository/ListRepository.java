@@ -6,7 +6,9 @@ import com.kiomnd2.vuespring.entity.MemberEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ListRepository extends CrudRepository<ListEntity,Long> {
      List<ListEntity> findAllByMember_UserId(String userId);
+     Optional<ListEntity> findById(long id);
 }

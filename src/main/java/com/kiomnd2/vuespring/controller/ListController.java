@@ -33,7 +33,10 @@ public class ListController {
     }
 
     @PostMapping("/update")
-    public void updateItem(@RequestBody ListDto listDto) { listService.updateItem(listDto); }
+    public void updateItem(@RequestBody ListDto listDto) {
+        System.out.println(listDto);
+        listService.updateItem(listDto);
+    }
 
 
     @PostMapping("/delete")

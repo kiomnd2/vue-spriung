@@ -1,6 +1,7 @@
 package com.kiomnd2.vuespring.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kiomnd2.vuespring.dto.ListDto;
 import com.kiomnd2.vuespring.dto.MemberDto;
 import lombok.*;
@@ -28,12 +29,12 @@ public class ListEntity extends TimeEntity{
     private String contents;
 
     @Column
-    private boolean isComplete;
+    private boolean complete;
 
 
     public ListEntity update(ListDto listDto) {
         this.contents = listDto.getContents();
-        this.isComplete = listDto.isComplete();
+        this.complete = listDto.isComplete();
         return this;
     }
 
@@ -42,10 +43,10 @@ public class ListEntity extends TimeEntity{
     }
 
     @Builder
-    public ListEntity(String contents, MemberEntity member, boolean isComplete) {
+    public ListEntity(String contents, MemberEntity member, boolean complete) {
         this.member = member;
         this.contents = contents;
-        this.isComplete = isComplete;
+        this.complete = complete;
     }
 
 }
