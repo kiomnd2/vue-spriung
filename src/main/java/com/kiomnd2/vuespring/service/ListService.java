@@ -54,7 +54,7 @@ public class ListService {
 
         ListEntity listEntity = ListEntity.builder()
                 .contents(listDto.getContents())
-                .isComplete(listDto.isComplete())
+                .complete(listDto.isComplete())
                 .member(memberEntity)
                 .build();
 
@@ -71,9 +71,12 @@ public class ListService {
         listRepository.deleteById(listDto.getId());
     }
 
-    public Long updateItem(ListDto listDto) {
-        ListEntity list= listRepository.findById(listDto.getId()).get();
-        list.update(listDto);
-        return listRepository.save(list).getId();
+    public void updateItem(ListDto listDto) {
+
+        MemberEntity memberEntity = memberRepository.findByUserId(listDto.getMemberDto().getUserId()).get();
+        ListEntity listEntity = listRepository.findById(listDto.getId()).get();
+        ListEntity updatedEntity = listEntity.update(listDto);
+
+        listRepository.save(updatedEntity);
     }
 }
