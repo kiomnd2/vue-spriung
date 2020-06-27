@@ -86,8 +86,8 @@ public class ListJpaTest {
 
         Assert.assertThat(id, is(updatedId));
         Assert.assertThat("DDDDD", is(findList.getContents()));
-
     }
+
 
 
 
