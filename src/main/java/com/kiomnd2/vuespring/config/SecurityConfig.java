@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,10 +23,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 
 @EnableWebSecurity
@@ -58,10 +64,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .csrf()
                 .disable() // 다시한번 세팅
                 .authorizeRequests()
-                    .antMatchers("/","/api/user/*").permitAll()
+                    .antMatchers("/","/api/user/*","/login").permitAll()
                     .anyRequest().hasRole("USER")
                     .and()
-                .formLogin().disable();
+                .formLogin().disable()
+                .logout()
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(new LogoutSuccessHandler() {
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        // 기존에 리다이렉트 해줬다..
+                        // TODO 뭘해줘야하나..
+                    }
+                })
+                .invalidateHttpSession(true);
 
         http.addFilterAt(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     } // json 으로 응답 주게끔 설정 찾아보기
@@ -78,7 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             e.printStackTrace();
         }
         return authFilter;
-
     }
 
     @Bean

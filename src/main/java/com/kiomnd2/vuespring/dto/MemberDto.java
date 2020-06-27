@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -25,7 +26,6 @@ public class MemberDto{
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
-    List<ListEntity> list = new ArrayList<>();
 
 
     // 뭔가 변경 필요한 속성에 대해 메서드를 생성해 줘야함
